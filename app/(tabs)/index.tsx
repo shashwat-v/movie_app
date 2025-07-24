@@ -3,6 +3,7 @@ import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
 import useFetch from "@/services/useFetch";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -16,14 +17,16 @@ import SearchBar from "../components/SearchBar";
 
 export default function Index() {
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
-  } = useFetch(() => fetchMovies({ query: "" }));
+  } = useFetch(() => fetchMovies({ query: searchQuery }));
 
   return (
+    // <SafeAreaView className="flex-1 bg-[#181336]">
     <View className="flex-1 bg-primary">
       <Image source={images.bg} className="absolute w-full z-0" />
 
@@ -47,6 +50,8 @@ export default function Index() {
             <SearchBar
               onPress={() => router.push("/search")}
               placeholder="Search for a movie"
+              onChangeText={(text: string) => setSearchQuery}
+              value={searchQuery}
             />
 
             <>
@@ -73,5 +78,6 @@ export default function Index() {
         )}
       </ScrollView>
     </View>
+    // </SafeAreaView>
   );
 }
